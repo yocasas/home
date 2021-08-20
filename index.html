@@ -120,6 +120,7 @@
       url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev/login",
       type: 'POST',
       data: data,
+      "contentType": "application/json",
       success: function (data1, textStatus, jqXHR) {
         window.location.replace("https://yocasas.com.br/home/index2.html")
       },
@@ -163,11 +164,11 @@
 					</div>
 
 
-          <div class="mb-6 text-sm">
+          <!-- <div class="mb-6 text-sm">
             <a href="#" class="mt-1 text-green_medium underline font-medium hover:text-green_dark">
               Esqueci minha senha
             </a>
-          </div>
+          </div> -->
 
           <div>
 						<button type="submit" class="mb-2 text-green_dark group relative flex mx-auto justify-center px-10 py-1 rounded-full hover:bg-gray-300 hover:border-gray-300 text-center border-4 border-green_light text-sm bg-green_light">
