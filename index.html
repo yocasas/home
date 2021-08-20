@@ -101,6 +101,33 @@
         overflow-y: visible !important;
       }
     </style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  function onSubmit(form) {
+    var dataFormArray = $(form).serializeArray()
+
+    var objForm = {}
+
+    dataFormArray.forEach(x => {
+      objForm[x.name] = x.value
+    })
+    
+    data = JSON.stringify(objForm)
+
+    console.log(form)
+    $.ajax({
+      url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev/login",
+      type: 'POST',
+      data: data,
+      success: function (data1, textStatus, jqXHR) {
+        window.location.replace("https://yocasas.com.br/home/index2.html")
+      },
+      error: function (jqXHR, textStatus, errorThrown) {},
+    })
+    return false //don't submit
+  }
+</script>
   <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
     <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
     
@@ -121,7 +148,7 @@
         </div>
 
         <!--Body-->
-        <form class="space-y-4" action="#" method="POST">
+        <form class="space-y-4" action="#" method="POST" onsubmit="return onSubmit(this)">
 					<input type="hidden" name="remember" value="true">
 					<div class="rounded-md shadow-sm -space-y-px">
 						<div class="grid gap-6">
@@ -130,7 +157,7 @@
 							</div>
 
 							<div class="col-span-12">
-								<input placeholder="Senha" type="text" name="senha" id="senha" autocomplete="current-password" class="mb-4 text-green_dark border-b-2 border-gray-500 mt-1 h-10 block w-full sm:text-sm rounded-md">
+								<input placeholder="Senha" type="password" name="password" id="password" autocomplete="current-password" class="mb-4 text-green_dark border-b-2 border-gray-500 mt-1 h-10 block w-full sm:text-sm rounded-md">
 							</div>
 						</div>
 					</div>
@@ -149,8 +176,7 @@
 						</button>
 					</div>
 
-          
-
+        
           </form>
 
 
