@@ -21848,11 +21848,8 @@ video {
 }
 
 /* @layer utilities {
-  .bg-logo-white {
-    background-image: url("../images/logotype-white.svg");
-  }
-  .bg-logo-black {
-    background-image: url("../images/logotype-black.svg");
+  .bg-slider_1 {
+    background-image: url("./slider_images/slider_mobile_1.jpg");
   }
 } */
 
