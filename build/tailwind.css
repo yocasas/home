@@ -591,10 +591,7 @@ video {
 
   font-weight: 400;
 
-  src: local() url(../fonts/NiveauGroteskRegular.otf) format("otf");
-
-  src: url('../fonts/Min_font/NiveauGroteskRegular.woff') format('woff'),  /* Newer browsers */
-    url('../fonts/Min_font/NiveauGroteskRegular.ttf') format('truetype'); /* Safari og iOS, Chrome, Android, Firefox and Opera except Opera Mini  */
+  src: url("../fonts/NiveauGroteskRegular.otf")
 }
 
 .container {
