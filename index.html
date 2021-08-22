@@ -124,7 +124,11 @@
       success: function (data1, textStatus, jqXHR) {
         window.location.replace("https://yocasas.com.br/home/index2.html")
       },
-      error: function (jqXHR, textStatus, errorThrown) {},
+      error: function (jqXHR, textStatus, errorThrown) {
+        document.getElementById("error").innerHTML = "Email ou senha incorretos."
+
+
+      },
     })
     return false //don't submit
   }
@@ -151,14 +155,15 @@
         <!--Body-->
         <form class="space-y-4" action="#" method="POST" onsubmit="return onSubmit(this)">
 					<input type="hidden" name="remember" value="true">
-					<div class="rounded-md shadow-sm -space-y-px">
+					<div class="rounded-md  -space-y-px">
 						<div class="grid gap-6">
 							<div class="col-span-12">
-								<input placeholder="Email" type="text" name="email" id="email" autocomplete="email" class="text-green_dark border-b-2 border-gray-500 mt-1 h-10 block w-full  sm:text-sm rounded-md">
+								<input placeholder="Email" type="text" name="email" id="email" autocomplete="email" class="text-green_dark border-b-2 border-gray-500 mt-1 h-10 outline-none block w-full  sm:text-sm ">
 							</div>
 
 							<div class="col-span-12">
-								<input placeholder="Senha" type="password" name="password" id="password" autocomplete="current-password" class="mb-4 text-green_dark border-b-2 border-gray-500 mt-1 h-10 block w-full sm:text-sm rounded-md">
+								<input placeholder="Senha" type="password" name="password" id="password" autocomplete="current-password" class="mb-4 text-green_dark border-b-2 outline-none border-gray-500 mt-1 h-10 block w-full sm:text-sm ">
+                <div id="error" class="text-red-400"></div>
 							</div>
 						</div>
 					</div>
