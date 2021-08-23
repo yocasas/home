@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg" sizes="16x16" href="LOGO.svg" />
   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./build/tailwind.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <!-- Link Swiper's CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <title>Yô</title>
@@ -135,8 +136,7 @@
 
       <a href="#"
         class="login-button modal-open md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark inline-flex items-center">Login
-        <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg" ></div>
-
+        <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>   </a>
       <!--Modal-->
       <style>
         .modal {
@@ -301,7 +301,7 @@
       <div x-data="{ dropdownOpen: false }" class="usuario-button hidden relative">
         <a href="#" @click="dropdownOpen = !dropdownOpen"
           class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark inline-flex items-center">Usuário
-          <img class="hidden flex-wrap md:flex ml-4 lg:ml-32" src="burger_menu.svg"></a>
+          <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>  </a>
 
 
         <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
