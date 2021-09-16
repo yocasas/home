@@ -8,7 +8,9 @@
   <link rel="icon" type="image/svg" sizes="16x16" href="LOGO.svg" />
   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./build/tailwind.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
   <!-- Link Swiper's CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css" />
   <title>Yô</title>
@@ -40,18 +42,42 @@
 
       var myCookie = getCookie("login_session");
 
+
+
       if (myCookie == null) {
       }
       else {
+        var tokens = myCookie.split(".");
+        // console.log(atob(tokens[0])); //Alg, Type
+        var clientObject = JSON.parse(atob(tokens[1])) //Id, ClientType, Iat, exp
+
+        var clientType = clientObject.clientType
+
+        
+
+
+        
+
+        if (clientType == 0 && clientType == 1) { //TODO: Popups avisando terminar cadastro ou aguardar aprovacao
+
+          $('.usuario-button').removeClass('hidden');
+          $(".login-button").hide()
+          $(".usuario-button").show()
+
+        } else if (clientType == 2) {
+          $('.usuario-button').removeClass('hidden');
+        $('.explorar-button').removeClass('hidden');
+
         $(".login-button, .cadastro-button").hide()
         $(".usuario-button, .explorar-button").show()
 
+        }
 
-        $('.usuario-button').removeClass('hidden');
-        $('.explorar-button').removeClass('hidden');
+        
+
+
+        
       }
-
-
 
     });
 
@@ -136,7 +162,8 @@
 
       <a href="#"
         class="login-button modal-open md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark inline-flex items-center">Login
-        <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>   </a>
+        <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>
+      </a>
       <!--Modal-->
       <style>
         .modal {
@@ -169,7 +196,7 @@
             data: data,
             "contentType": "application/json",
             success: function (data1, textStatus, jqXHR) {
-              document.cookie = `login_session=${data1.token}; max-age=3000`;
+              document.cookie = `login_session=${data1.token}; max-age=3000; path=/`;
               window.location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -301,7 +328,8 @@
       <div x-data="{ dropdownOpen: false }" class="usuario-button hidden relative">
         <a href="#" @click="dropdownOpen = !dropdownOpen"
           class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark inline-flex items-center">Usuário
-          <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>  </a>
+          <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>
+        </a>
 
 
         <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
