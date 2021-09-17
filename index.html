@@ -362,7 +362,7 @@
       <h2 class="lg:text-5xl text-4xl font-bold text-white leading-none mb-6 md:mb-2">Seja bem-vindo</h2>
       <h2 class="lg:text-2xl text-xl text-white leading-none mb-4 text-center">Yô é um clube exclusivo para troca de
         casas.</h2>
-      <a href="#"
+      <a href="https://yocasas.com.br/onboarding"
         class="cadastro-button bg-green_light px-10 py-3 rounded-full hover:bg-gray-300 hover:border-gray-300 text-center border-4 border-green_light text-green_dark">Quero
         fazer parte</a>
       <a href="https://yocasas.com.br/dashboard/buscador/"
@@ -438,10 +438,10 @@
 
         <!-- <div class="space-x-16"> -->
         <div class="side-nav w-full flex justify-between space-x-2 md:space-x-20" id="sideNav">
-          <a id="praiaNav" class="text-lg md:text-xl font-semibold" href="#a">Praia</a>
-          <a id="campoNav" class="text-lg md:text-xl font-semibold" href="#a">Campo</a>
-          <a id="montanhaNav" class="text-lg md:text-xl font-semibold" href="#a">Montanha</a>
-          <a id="cidadeNav" class="text-lg md:text-xl font-semibold" href="#a">Cidade</a>
+          <a id="praiaNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('beach')">Praia</a>
+          <a id="campoNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('country')">Campo</a>
+          <a id="montanhaNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('mountain')">Montanha</a>
+          <a id="cidadeNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('city')">Cidade</a>
         </div>
         <!-- </div> -->
       </nav>
@@ -483,59 +483,131 @@
   </style>
 
 
+<script>
+
+function getHomes(locationType){
+  let data = {"LocationType": locationType}
+
+  let newHome = $('#newHome')
+
+  function range(size, startAt = 0) {
+            return [...Array(size).keys()].map(i => i + startAt);
+        }
+
+  function getS3file(name, image) {
+            $.ajax({
+                url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile",
+                type: "POST",
+                data: JSON.stringify({
+                    "pic-name": name
+                }),
+                contentType: "application/json",
+                success: (x) => {
+                    image.attr("src", `data:image/png;base64,${x}`)
+                }
+            })
+        }
+
+        let homesShow = $("#homes_show")
+        $.ajax({
+            url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/gethomes",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+
+            success: function (x) {
+                let dbResponse = x
+                homesShow.find(".show_home").remove()
+                
+                dbResponse.slice(-3).forEach(element => {
+
+                  let imageUser = element["picturesS3Urls"]
+                  
+                    let homeClone = newHome.clone()
+                    if (imageUser !== null) homeClone.find("#img_source").attr("src", getS3file(imageUser[0], homeClone.find("#img_source")));
+
+                    homeClone.find('#nickName').text(element["nickName"]);
+                    homeClone.find('#Location').text(`${element["city"]}, ${element["state"]}`);
+                    let stars = range(element["multiplier"], 1)
+
+                    stars.forEach(startId => {
+                      homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
+                    })
+
+                    let points = element["multiplier"] * 1000
+                    homeClone.find('#points').text(points >= 1000 ?
+                        `${points / 1000}.${points % 1000 > 100 ? "0" + (points % 1000) : "00" + (points % 1000)}` :
+                        `${points}`);
+                    homeClone.removeClass("hidden");
+                    homeClone.addClass("show_home");
+                    homeClone.attr("id", "show_home");
+                    homesShow.append(homeClone)
+                });
+            }
+        })
+}
+
+</script>
+
+
+
+
   <!-- Destinos -->
   <div class="max-w-7xl mx-auto lg:px-0 px-4">
     <!-- Fotos praia -->
 
-    <section class="praiaNav flex items-start flex-wrap lg:my-10 my-6">
+    <section class=" flex items-start flex-wrap lg:my-10 my-6" id="homes_show">
 
+      <a  href="https://yocasas.com.br/dashboard/casa/detalhes/">
       <!-- Card 1 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img class="object-cover rounded w-full mb-2" loading="lazy" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
+      <article class="hidden cursor-pointer lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6" id="newHome">
+        <img class="object-contain rounded w-full mb-2" loading="lazy" id="img_source" src="homes_images/CASA_1.png" />
+        <h1 class="text-green_dark text-3xl font-medium leading-snug" id="nickName">Nome da casa</h1>
 
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
+        <h1 class="text-green_dark text-xl leading-snug" id="Location">Cidade, Estado</h1>
 
         <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+          <div class="flex justify-start items-center" id="rank"> 
+            <!-- use star_filled class  -->
+            
+            <svg id='s1' class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s2" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s3" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s4" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s5" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s6" class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
           </div>
 
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
+          <h1 class="text-green_medium font-medium text-3xl leading-snug" id="points">2.000</h1>
         </div>
 
 
@@ -544,651 +616,15 @@
           <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
         </div>
       </article>
+    </a>
 
-      <!-- Card 2 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6 ">
-        <img class="object-cover rounded w-full mb-2" loading="lazy" src="homes_images/CASA_2.jpg" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
 
     </section>
 
     <!-- Fotos praia -->
 
 
-    <!-- Fotos campo -->
-
-    <section class="campoNav flex items-start flex-wrap justify-between lg:my-10 my-6">
-
-      <!-- Card 1 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 2 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_3.jpg" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-    </section>
-
-    <!-- Fotos campo -->
-
-
-    <!-- Fotos montanha -->
-
-    <section class="montanhaNav flex items-start flex-wrap justify-between lg:my-10 my-6">
-
-      <!-- Card 1 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 2 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_4.jpg" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-    </section>
-
-    <!-- Fotos montanha -->
-
-
-    <!-- Fotos cidade -->
-
-    <section class="cidadeNav flex items-start flex-wrap justify-between lg:my-10 my-6">
-
-      <!-- Card 1 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 2 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_5.jpg" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6">
-        <img loading="lazy" class="object-cover rounded w-full mb-2" src="homes_images/CASA_1.png" />
-        <h1 class="text-green_dark text-3xl font-medium leading-snug">Nome da casa</h1>
-
-        <h1 class="text-green_dark text-xl leading-snug">Cidade, Estado</h1>
-
-        <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center">
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_filled fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-
-            <svg class="star_empty w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
-              <path id="Trazado_78005"
-                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
-              </path>
-            </svg>
-          </div>
-
-          <h1 class="text-green_medium font-medium text-3xl leading-snug">2.000</h1>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-          <h1 class="text-green_dark text-lg leading-snug">Classificação</h1>
-          <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
-        </div>
-      </article>
-
-    </section>
+    
 
 
     <!-- Fotos cidade -->
@@ -1196,6 +632,7 @@
 
     <script type="text/javascript">
       $(document).ready(function () {
+        getHomes('beach')
 
         $('.campoNav, .montanhaNav, .cidadeNav').hide();
         $(".side-nav a").each(function (i) {
