@@ -53,12 +53,7 @@
 
         var clientType = clientObject.clientType
 
-        
-
-
-        
-
-        if (clientType == 0 && clientType == 1) { //TODO: Popups avisando terminar cadastro ou aguardar aprovacao
+        if (clientType == 0 || clientType == 1) { //TODO: Popups avisando terminar cadastro ou aguardar aprovacao
 
           $('.usuario-button').removeClass('hidden');
           $(".login-button").hide()
