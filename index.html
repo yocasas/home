@@ -317,9 +317,7 @@
       </script>
       <script>
         function removeCookie() {
-          browser.cookies.remove({
-            name: "login_session"
-          });
+          document.cookie = "login_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
         }
       </script>
       <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
