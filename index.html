@@ -525,7 +525,7 @@ function getHomes(locationType){
                     homeClone.find('#nickName').text(element["nickName"]);
                     homeClone.find('#Location').text(`${element["city"]}, ${element["state"]}`);
                     let stars = range(element["multiplier"], 1)
-
+                    homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
                     stars.forEach(startId => {
                       homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
                     })
