@@ -554,10 +554,12 @@ function getHomes(locationType){
 
     <section class=" flex items-start flex-wrap lg:my-10 my-6" id="homes_show">
 
-      <a  href="https://yocasas.com.br/dashboard/casa/detalhes/">
       <!-- Card 1 -->
-      <article class="hidden cursor-pointer lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6" id="newHome">
-        <img class="object-contain rounded w-full mb-2" loading="lazy" id="img_source" src="homes_images/CASA_1.png" />
+      <article class="hidden cursor-pointer lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6" id="newHome" onclick="location.href='/dashboard/casa/detalhes/'">
+
+        <div class="object-center h-4/6">
+        <img class="object-contain rounded w-full mb-2" loading="lazy" id="img_source" src="homes_images/pngwing.png" />
+      </div>
         <h1 class="text-green_dark text-3xl font-medium leading-snug" id="nickName">Nome da casa</h1>
 
         <h1 class="text-green_dark text-xl leading-snug" id="Location">Cidade, Estado</h1>
@@ -612,7 +614,6 @@ function getHomes(locationType){
           <h1 class="text-green_dark text-lg leading-snug">Pontos</h1>
         </div>
       </article>
-    </a>
 
 
     </section>
