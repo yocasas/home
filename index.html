@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg" sizes="16x16" href="LOGO.svg" />
   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./build/tailwind.css" />
+  <link rel="stylesheet" href="./assets/loading.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -52,8 +53,7 @@
         var clientObject = JSON.parse(atob(tokens[1])) //Id, ClientType, Iat, exp
 
         var clientType = clientObject.clientType
-        console.log("clientType")
-        console.log(clientType)
+     
 
         if (clientType == 0 || clientType == 1) { //TODO: Popups avisando terminar cadastro ou aguardar aprovacao
 
@@ -63,18 +63,15 @@
 
         } else if (clientType >= 2) {
           $('.usuario-button').removeClass('hidden');
-        $('.explorar-button').removeClass('hidden');
+          $('.explorar-button').removeClass('hidden');
 
-        $(".login-button, .cadastro-button").hide()
-        $(".usuario-button, .explorar-button").show()
+          $(".login-button, .cadastro-button").hide()
+          $(".usuario-button, .explorar-button").show()
 
         }
-
-        
-
-
-        
       }
+
+      
 
     });
 
@@ -84,6 +81,12 @@
 </head>
 
 <body class="antialiased text-gray-800 font-niveau">
+  <div class="hidden absolute bg-gray-900 bg-opacity-50 z-30 w-full h-full flex justify-center items-center">
+        <div class="loading dot-pulse">
+
+        </div>
+    </div>
+
   <header style="background-image: url('HEADER_FOTO.jpg');"
     class="relative bg-no-repeat bg-cover p-10 md:p-4  bg-bottom lg:bg-center">
 
@@ -152,7 +155,7 @@
               </g>
             </g>
           </svg>
-          
+
 
 
         </h1>
@@ -187,7 +190,14 @@
 
           data = JSON.stringify(objForm)
 
-          console.log(form)
+
+          $('html, body').css({
+                        overflow: 'hidden',
+                        height: '100%'
+                    });
+
+          $(".loading").parent().removeClass('hidden')
+          
           $.ajax({
             url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/login",
             type: 'POST',
@@ -195,6 +205,12 @@
             "contentType": "application/json",
             success: function (data1, textStatus, jqXHR) {
               document.cookie = `login_session=${data1.token}; max-age=3000; path=/`;
+              $('html, body').css({
+                        overflow: 'auto',
+                        height: 'auto'
+                    });
+          $(".loading").parent().addClass('hidden')
+
               window.location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -323,8 +339,8 @@
       <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
       <div x-data="{ dropdownOpen: false }" class="usuario-button hidden relative">
         <a href="#" @click="dropdownOpen = !dropdownOpen"
-          class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark inline-flex items-center">Usuário
-          <div class="hidden flex-wrap md:flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>
+          class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark md:inline-flex items-center">Usuário
+          <div class="flex-wrap flex ml-4 lg:ml-32 fas fa-bars fa-lg"></div>
         </a>
 
 
@@ -334,10 +350,12 @@
           <!-- <a href="#" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Perfil
           </a> -->
-          <a onclick="location.href='/onboarding'" class="cursor-pointer block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
+          <a onclick="location.href='/onboarding'"
+            class="cursor-pointer block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Editar Cadastro
           </a>
-          <a onclick="location.href='/dashboard/chat'" class="block cursor-pointer px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
+          <a onclick="location.href='/dashboard/chat'"
+            class="block cursor-pointer px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Mensagens
           </a>
           <!-- <a href="#" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
@@ -383,7 +401,8 @@
 
   <div class="grid items-center justify-center  mx-auto lg:py-16 py-12 lg:px-0 px-4">
 
-    <h3 class="grid justify-items-center text-green_dark font-bold text-xl md:text-3xl mb-8 leading-none">Para onde você quer ir?</h3>
+    <h3 class="grid justify-items-center text-green_dark font-bold text-xl md:text-3xl mb-8 leading-none">Para onde você
+      quer ir?</h3>
 
 
     <!-- Menu de destinos -->
@@ -435,7 +454,8 @@
         <div class="side-nav w-full flex justify-between space-x-2 md:space-x-20" id="sideNav">
           <a id="praiaNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('beach')">Praia</a>
           <a id="campoNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('country')">Campo</a>
-          <a id="montanhaNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('mountain')">Montanha</a>
+          <a id="montanhaNav" class="text-lg md:text-xl font-semibold" href="#a"
+            onclick="getHomes('mountain')">Montanha</a>
           <a id="cidadeNav" class="text-lg md:text-xl font-semibold" href="#a" onclick="getHomes('city')">Cidade</a>
         </div>
         <!-- </div> -->
@@ -478,71 +498,72 @@
   </style>
 
 
-<script>
+  <script>
 
-function getHomes(locationType){
-  let data = {"LocationType": locationType}
+    function getHomes(locationType) {
+      let data = { "LocationType": locationType }
 
-  let newHome = $('#newHome')
+      let newHome = $('#newHome')
 
-  function range(size, startAt = 0) {
-            return [...Array(size).keys()].map(i => i + startAt);
-        }
+      function range(size, startAt = 0) {
+        return [...Array(size).keys()].map(i => i + startAt);
+      }
 
-  function getS3file(name, image) {
-            $.ajax({
-                url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile",
-                type: "POST",
-                data: JSON.stringify({
-                    "pic-name": name
-                }),
-                contentType: "application/json",
-                success: (x) => {
-                    image.attr("src", `data:image/png;base64,${x}`)
-                }
-            })
-        }
-
-        let homesShow = $("#homes_show")
+      function getS3file(name, image) {
         $.ajax({
-            url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/gethomes",
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-
-            success: function (x) {
-                let dbResponse = x
-                homesShow.find(".show_home").remove()
-                
-                dbResponse.slice(-3).forEach(element => {
-
-                  let imageUser = element["picturesS3Urls"]
-                  
-                    let homeClone = newHome.clone()
-                    if (imageUser !== null) homeClone.find("#img_source").attr("src", getS3file(imageUser[0], homeClone.find("#img_source")));
-
-                    homeClone.find('#nickName').text(element["nickName"]);
-                    homeClone.find('#Location').text(`${element["city"]}, ${element["state"]}`);
-                    let stars = range(element["multiplier"], 1)
-                    homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
-                    stars.forEach(startId => {
-                      homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
-                    })
-
-                    let points = element["multiplier"] * 1000
-                    homeClone.find('#points').text(points >= 1000 ?
-                        `${points / 1000}.${points % 1000 > 100 ? "0" + (points % 1000) : "00" + (points % 1000)}` :
-                        `${points}`);
-                    homeClone.removeClass("hidden");
-                    homeClone.addClass("show_home");
-                    homeClone.attr("id", "show_home");
-                    homesShow.append(homeClone)
-                });
-            }
+          url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile",
+          type: "POST",
+          data: JSON.stringify({
+            "pic-name": name
+          }),
+          contentType: "application/json",
+          success: (x) => {
+            image.parent().siblings().addClass('hidden')
+            image.attr("src", `data:image/png;base64,${x}`)
+          }
         })
-}
+      }
 
-</script>
+      let homesShow = $("#homes_show")
+      $.ajax({
+        url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/gethomes",
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+
+        success: function (x) {
+          let dbResponse = x
+          homesShow.find(".show_home").remove()
+
+          dbResponse.slice(-3).forEach(element => {
+
+            let imageUser = element["picturesS3Urls"]
+
+            let homeClone = newHome.clone()
+            if (imageUser !== null) homeClone.find("#img_source").attr("src", getS3file(imageUser[0], homeClone.find("#img_source")));
+
+            homeClone.find('#nickName').text(element["nickName"]);
+            homeClone.find('#Location').text(`${element["city"]}, ${element["state"]}`);
+            let stars = range(element["multiplier"], 1)
+            homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
+            stars.forEach(startId => {
+              homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
+            })
+
+            let points = element["multiplier"] * 1000
+            homeClone.find('#points').text(points >= 1000 ?
+              `${points / 1000}.${points % 1000 > 100 ? "0" + (points % 1000) : "00" + (points % 1000)}` :
+              `${points}`);
+            homeClone.removeClass("hidden");
+            homeClone.addClass("show_home");
+            homeClone.attr("id", "show_home");
+            homesShow.append(homeClone)
+          });
+        }
+      })
+    }
+
+  </script>
 
 
 
@@ -553,45 +574,59 @@ function getHomes(locationType){
 
     <section class="justify-center flex items-start flex-wrap lg:my-10 my-6" id="homes_show">
 
+
       <!-- Card 1 -->
       <article class="hidden cursor-pointer lg:w-1/3 w-full lg:pr-6 lg:mb-0 mb-6" id="newHome">
+        <div class="w-full">
+          <div class="items-center h-64 flex justify-center w-full">
+            <div class="dot-pulse">
+            </div>
+          </div>
+          <div class="object-center h-4/6">
+            <img class="zoom object-contain rounded w-full mb-2" loading="lazy" id="img_source"
+              src="" />
+          </div>
+        </div>
 
-        <div class="object-center h-4/6">
-        <img class="object-contain rounded w-full mb-2" loading="lazy" id="img_source" src="homes_images/pngwing.png" />
-      </div>
+
         <h1 class="text-green_dark text-3xl font-medium leading-snug" id="nickName">Nome da casa</h1>
 
         <h1 class="text-green_dark text-xl leading-snug capitalize" id="Location">Cidade, Estado</h1>
 
         <div class="-mb-1 flex items-center justify-between">
-          <div class="flex justify-start items-center" id="rank"> 
+          <div class="flex justify-start items-center" id="rank">
             <!-- use star_filled class  -->
-            
-            <svg id='s1' class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+
+            <svg id='s1' class="star_empty fill-current w-4 h-4 text-green_medium mr-1"
+              viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg id="s2" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s2" class="star_empty fill-current w-4 h-4 text-green_medium mr-1"
+              viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg id="s3" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s3" class="star_empty fill-current w-4 h-4 text-green_medium mr-1"
+              viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg id="s4" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s4" class="star_empty fill-current w-4 h-4 text-green_medium mr-1"
+              viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
 
-            <svg id="s5" class="star_empty fill-current w-4 h-4 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s5" class="star_empty fill-current w-4 h-4 text-green_medium mr-1"
+              viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
@@ -615,12 +650,13 @@ function getHomes(locationType){
       </article>
 
 
+
     </section>
 
     <!-- Fotos praia -->
 
 
-    
+
 
 
     <!-- Fotos cidade -->
@@ -744,7 +780,7 @@ function getHomes(locationType){
   <script>
     var swiper = new Swiper(".mySwiper", {
       autoplay: {
-        delay: 2500,
+        delay: 5000,
         disableOnInteraction: false,
       },
       pagination: {
