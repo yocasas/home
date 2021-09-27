@@ -205,11 +205,7 @@
             "contentType": "application/json",
             success: function (data1, textStatus, jqXHR) {
               document.cookie = `login_session=${data1.token}; max-age=3000; path=/`;
-              $('html, body').css({
-                        overflow: 'auto',
-                        height: 'auto'
-                    });
-          $(".loading").parent().addClass('hidden')
+              
 
               window.location.reload();
             },
@@ -219,6 +215,11 @@
 
             },
           })
+          $('html, body').css({
+                        overflow: 'auto',
+                        height: 'auto'
+                    });
+          $(".loading").parent().addClass('hidden')
           return false //don't submit
         }
       </script>
