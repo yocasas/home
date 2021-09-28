@@ -74,6 +74,9 @@
           $(".login-button, .cadastro-button").hide()
           $(".usuario-button, .explorar-button").show()
 
+          $("#infoRegister").hide()
+
+
         }
       }
 
@@ -411,7 +414,7 @@
 
     <h3 class="grid justify-items-center text-green_dark font-bold text-xl md:text-3xl mb-4 leading-none">Para onde você
       quer ir?</h3>
-    <h3 class="grid md:flex justify-items-center text-green_dark text-lg md:text-xl mb-8 leading-none">Para ter acesso a todas nossas casas,&nbsp;<a onclick="location.href='/onboarding'" class="underline cursor-pointer font-bold">faça 
+    <h3 id="infoRegister" class="grid md:flex justify-items-center text-green_dark text-lg md:text-xl mb-8 leading-none">Para ter acesso a todas nossas casas,&nbsp;<a onclick="location.href='/onboarding'" class="underline cursor-pointer font-bold">faça 
       o seu cadastro no Yô.</a>
     </h3>
 
@@ -838,7 +841,7 @@
       </a>
     </div>
       
-        <ul class="leading-loose sm:flex sm:flex-row sm:justify-between sm:w-1/4 w-full ">
+        <ul class="leading-loose sm:flex sm:flex-row sm:justify-between sm:w-2/5 w-full ">
           <li><a onclick="location.href='/onboarding'" class="cursor-pointer text-green_light hover:underline" href="#">Cadastro</a></li>
           <li><a class="cursor-pointer text-green_light hover:underline" href="assets/tabela.pdf" target="_blank">Tabela de pontos</a></li>
           <li><a class="cursor-pointer text-green_light hover:underline" href="#">Política de privacidade</a></li>
