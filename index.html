@@ -366,13 +366,13 @@
         <a href="#" @click="dropdownOpen = !dropdownOpen"
           class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark sm:hidden inline-flex items-center">
           <div class="flex-wrap flex sm:ml-24 fas fa-bars fa-lg"></div>
-        
+        </a>
       
 
 
         <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
 
-        <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-3/4 mr-10 bg-white rounded-md shadow-xl z-20">
+        <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 sm:w-3/4 sm:mr-10 bg-white rounded-md shadow-xl z-20">
           <!-- <a href="#" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Perfil
           </a> -->
