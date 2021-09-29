@@ -360,8 +360,14 @@
       <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
       <div x-data="{ dropdownOpen: false }" class="usuario-button hidden relative">
         <a href="#" @click="dropdownOpen = !dropdownOpen"
-          class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark md:inline-flex items-center" id="userNameDrop">Usuário
+          class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark hidden md:inline-flex items-center" id="userNameDrop">Usuário
         </a>
+
+        <a href="#" @click="dropdownOpen = !dropdownOpen"
+          class="md:mx-10 mx-4 bg-green_light px-5 py-2 rounded-full hover:bg-gray-300 hover:border-gray-300 border-4 border-green_light text-green_dark sm:hidden inline-flex items-center">
+          <div class="flex-wrap flex sm:ml-24 fas fa-bars fa-lg"></div>
+        
+      
 
 
         <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 h-full w-full z-10"></div>
