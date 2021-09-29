@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css" />
   <title>Yô</title>
 
+  <script type="text/javascript" src="scripts/commonYo.js"></script>
 
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
   <script>
@@ -579,10 +580,11 @@
               homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
             })
 
-            let points = element["multiplier"] * 1000
-            homeClone.find('#points').text(points >= 1000 ?
-              `${points / 1000}.${points % 1000 > 100 ? "0" + (points % 1000) : "00" + (points % 1000)}` :
-              `${points}`);
+
+            let points = starsToPointsPerNight(element["multiplier"])
+            let pointsParsed = numberWithCommas(points)
+            
+            homeClone.find('#points').text(pointsParsed);
             homeClone.removeClass("hidden");
             homeClone.addClass("show_home");
             homeClone.attr("id", "show_home");
