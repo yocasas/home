@@ -20,6 +20,8 @@
 
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
   <script>
+    let selectedModal = ""
+
     function getCookie(name) {
       var dc = document.cookie;
       var prefix = name + "=";
@@ -63,11 +65,15 @@
 
         $("#infoRegister").hide()
 
-        if (clientType == 0 || clientType == 1) { //TODO: Popups avisando terminar cadastro ou aguardar aprovacao
+        if (clientType < 2) { //TODO: Popups avisando terminar cadastro ou aguardar aprovacao
 
           $('.usuario-button').removeClass('hidden');
           $(".login-button").hide()
           $(".usuario-button").show()
+
+          
+          selectedModal = '.modalWarning' //TODO: POPUP - arrumar
+          toggleModal(selectedModal) //TODO: POPUP - arrumar
 
         } else if (clientType >= 2) {
           $('.usuario-button').removeClass('hidden');
@@ -75,6 +81,12 @@
 
           $(".login-button, .cadastro-button").hide()
           $(".usuario-button, .explorar-button").show()
+
+          
+
+         
+          
+
 
 
 
@@ -318,6 +330,53 @@
         </div>
       </div>
 
+
+
+
+<!-- Modal aviso de registro -->
+      <div
+      class="modalWarning opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-20">
+      <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+
+      <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg z-50 overflow-y-auto">
+
+
+
+        <!-- Add margin if you want to see some of the overlay behind the modal-->
+        <div class="modal-content py-4 text-left px-6">
+          <!--Title-->
+          <div class="flex justify-between items-center pb-3">
+            <p class="text-sm font-bold text-green_dark mx-auto">Aviso!</p>
+            <div class="modal-close cursor-pointer z-50">
+              <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                viewBox="0 0 18 18">
+                <path
+                  d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                </path>
+              </svg>
+            </div>
+          </div>
+
+          <!--Body-->
+          
+          <div class="text-center text-green_dark leading-relaxed">
+            Termine de preencher o seu cadastro. Caso já tenha finalizado, enviaremos um e-mail de  aprovação. 
+Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="cursor-pointer underline">clique aqui</a>.
+          </div>
+
+          <!--Footer-->
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
       <script>
         var openmodal = document.querySelectorAll('.modal-open')
         for (var i = 0; i < openmodal.length; i++) {
@@ -349,12 +408,29 @@
         };
 
 
-        function toggleModal() {
+        function toggleModal(modalArgs) {
+          if (selectedModal != '.modal') {
+            modalArgs = selectedModal
+          }
+
+          
+          console.log(modalArgs)
+          
+        
+          if(!modalArgs || typeof(modalArgs) != "string" || modalArgs == "") {
+            modalArgs = '.modal'
+
+          }
+
           const body = document.querySelector('body')
-          const modal = document.querySelector('.modal')
+          const modal = document.querySelector(modalArgs)
           modal.classList.toggle('opacity-0')
           modal.classList.toggle('pointer-events-none')
           body.classList.toggle('modal-active')
+
+          if (typeof(modalArgs) != "object") selectedModal = modalArgs
+        
+
         }
 
 
@@ -402,7 +478,7 @@
           </a>
 
           <div id="parentPoints"
-          class="flex justify-between text-base  border-t-2 border-green_light cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
+          class="flex justify-between text-base  border-t border-green_light cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
           Pontuação: <div id="pointsUser" class="font-bold text-green_light text-xl"></div>
         </div>
 
