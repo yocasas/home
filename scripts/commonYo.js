@@ -15,7 +15,7 @@ function changeUserName(element) {
 
 function traduzirLocation(location, tiny) {
 
-    
+
     let tradutor = {
         'beach': "Destino de praia",
         'country': "Destino de campo",
@@ -72,7 +72,7 @@ let checkCurrentUser = function () {
         let currentDate = new Date()
 
 
-        if (clientInfo.exp < (currentDate.getTime()/1000) | clientInfo.clientType < 2) {
+        if (clientInfo.exp < (currentDate.getTime() / 1000) | clientInfo.clientType < 2) {
             window.onload(window.location.replace("/home"))
         }
     }
@@ -101,13 +101,13 @@ function toHumanDate(x) {
 
 function toIsoDate(x) {
     let date = x
-    var day  = date.split("/")[0];
-    var month  = date.split("/")[1];
-    var year  = date.split("/")[2];
+    var day = date.split("/")[0];
+    var month = date.split("/")[1];
+    var year = date.split("/")[2];
 
     //return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate());
 
-    return year + '-' + ("0"+month).slice(-2) + '-' + ("0"+day).slice(-2);
+    return year + '-' + ("0" + month).slice(-2) + '-' + ("0" + day).slice(-2);
 
 
 }
@@ -135,4 +135,57 @@ let starsToPointsPerNight = function (multiplier) {
     }
 
 
+}
+
+function getUserInfo(token) {
+    return new Promise((resolve, reject) => {
+
+
+
+        let data = {}
+        let clientObject = {}
+        if (token) {
+            if (typeof (token) === typeof ("string")) {
+                var tokens = token.split(".");
+
+                // console.log(atob(tokens[0])); //Alg, Type
+                clientObject = JSON.parse(atob(tokens[1])) //Id, ClientType, Iat, exp
+
+
+
+            }
+
+
+            var clientId = clientObject.ClientId
+            // objFormUser["ClientId"] = clientId
+            data = {
+                "ClientId": clientId
+            }
+
+        }
+
+        //TODO: Usar os headers e nao clientid como argumento
+        data = JSON.stringify(data)
+
+        $.ajax({
+            url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/getuser",
+            type: 'POST',
+            data: data,
+            headers: {
+                'Authorization': token,
+            },
+            "contentType": "application/json",
+            success: function (data1, textStatus, jqXHR) {
+                let element = data1
+                resolve(`${element["points"]}`)
+
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+            },
+        })
+
+
+    })
 }

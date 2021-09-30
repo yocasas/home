@@ -25,6 +25,13 @@
   clip: rect(1px, 1px, 1px, 1px); /* All other browsers */
 }
 
+#parentPoints:hover #pointsUser {
+  --text-opacity: 1;
+  color: #698D86;
+  color: rgba(105, 141, 134, var(--text-opacity));
+}
+
+
 
 .label {
   @apply uppercase tracking-wide font-semibold text-xs text-gray-900 mb-2 block;
