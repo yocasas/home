@@ -735,7 +735,13 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
             if (imageUser !== null) homeClone.find("#img_source").attr("src", getS3file(imageUser[0], homeClone.find("#img_source"), element));
 
             homeClone.find('#nickName').text(element["nickName"]);
-            homeClone.find('#Location').text(`${element["city"]}, ${element["state"]}`);
+            let locationChange = ''
+            if(`${element["state"]}` != 'undefined') {
+              locationChange = `${element["state"]}`
+            } else {
+              locationChange = `${element["country"]}`
+            }
+            homeClone.find('#Location').text(`${element["city"]}, `+locationChange+``);
             let stars = range(element["multiplier"], 1)
             homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
             stars.forEach(startId => {
