@@ -381,7 +381,7 @@
 
               <div>
                 <button type="submit"
-                  class="mb-2 text-green_dark group relative flex mx-auto justify-center px-10 py-1 rounded-full hover:bg-gray-300 hover:border-gray-300 text-center border-4 border-green_light text-sm bg-green_light">
+                  class="mb-2 text-green_dark group relative flex mx-auto justify-center px-10 py-1 rounded-full hover:bg-green_detail hover:border-green_detail text-center border-4 border-green_light text-sm bg-green_light">
 
                   Login
                 </button>
@@ -736,9 +736,12 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
 
             homeClone.find('#nickName').text(element["nickName"]);
             let locationChange = ''
-            if(`${element["state"]}` != 'undefined') {
+            
+
+            if(`${element["state"]}` != "") {
               locationChange = `${element["state"]}`
             } else {
+              console.log(`${element["country"]}`)
               locationChange = `${element["country"]}`
             }
             homeClone.find('#Location').text(`${element["city"]}, `+locationChange+``);
