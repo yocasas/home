@@ -75,7 +75,7 @@
         var clientType = clientObject.clientType
 
         //Adiciona nome de usuario
-        $('#userNameDrop').text(clientObject.nickName)
+        $('#userNameDrop').text(decodeURIComponent(escape(clientObject.nickName)))
         $('#userNameDrop').append('<div class="flex-wrap flex ml-4 lg:ml-24 fas fa-bars fa-lg"></div>')
 
 
