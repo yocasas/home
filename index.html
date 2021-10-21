@@ -320,7 +320,7 @@
             data: data,
             "contentType": "application/json",
             success: function (data1, textStatus, jqXHR) {
-              document.cookie = `login_session=${data1.token}; max-age=10800; path=/`;
+              document.cookie = `login_session=${data1.token}; max-age=86400; path=/`;
               $('html, body').css({
                 overflow: 'auto',
                 height: 'auto'
