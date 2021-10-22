@@ -14,7 +14,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer">
   <!-- Link Swiper's CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css" />
-  <title>Yô</title>
+  <title>Yô Home</title>
 
   <script type="text/javascript" src="scripts/commonYo.js"></script>
 
@@ -23,11 +23,16 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V0C85S2RG3"></script>
   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
+       window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        
 
-      gtag('config', 'G-V0C85S2RG3');
+        gtag('config', 'G-V0C85S2RG3');
+        checkCurrentUser()
+        
+        if(clientInfo) gtag('set', {'id': clientInfo.ClientId.substring(7)});
+        
   </script>
 
   <script>

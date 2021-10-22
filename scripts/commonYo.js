@@ -64,9 +64,7 @@ let checkCurrentUser = function () {
 
     authCookie = myCookie
 
-    if (myCookie == null) {
-        window.onload(window.location.replace("/home"))
-    } else {
+     if (myCookie != null) {
         //console.log(`cliente ja esta logado ${myCookie}`)
         clientInfo = JSON.parse(atob(myCookie.split(".")[1]));
         let currentDate = new Date()
