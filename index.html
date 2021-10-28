@@ -18,7 +18,12 @@
 
   <script type="text/javascript" src="scripts/commonYo.js"></script>
 
-  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/additional-methods.min.js"></script>
+
+
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V0C85S2RG3"></script>
@@ -122,6 +127,62 @@
 
 
     });
+
+    function recoverPassword() {
+      $('html, body').css({
+            overflow: 'hidden',
+            height: '100%'
+          });
+
+          $(".loading").parent().removeClass('hidden')
+
+      var validator = $('#loginForms').validate()
+       if (validator.element("#email")) {
+
+        data = {
+          email: $("#email").val()
+        }
+
+        data = JSON.stringify(data)
+        $.ajax({
+                url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/recoverpassword",
+                type: 'POST',
+                data:data,
+                "contentType": "application/json",
+                success: function (data1, textStatus, jqXHR) {
+
+                  $('html, body').css({
+                overflow: 'auto',
+                height: 'auto'
+              });
+              $(".loading").parent().addClass('hidden')
+
+                    alert('Caso o email exista, enviaremos a alteração de senha.');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                  $('html, body').css({
+                overflow: 'auto',
+                height: 'auto'
+              });
+              $(".loading").parent().addClass('hidden')
+              
+                    alert('Erro');
+    
+    
+                },
+            })
+
+       } else {
+        $('html, body').css({
+                overflow: 'auto',
+                height: 'auto'
+              });
+              $(".loading").parent().addClass('hidden')
+       }
+
+      
+    }
 
 
     function getUserInfo(token) {
@@ -298,7 +359,7 @@
         }
       </style>
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
       <script>
         function onSubmit(form) {
           var dataFormArray = $(form).serializeArray()
@@ -379,12 +440,12 @@
             </div>
 
             <!--Body-->
-            <form class="space-y-4" action="#" method="POST" onsubmit="return onSubmit(this)">
+            <form class="space-y-4" action="#" method="POST" id="loginForms" onsubmit="return onSubmit(this)">
               <input type="hidden" name="remember" value="true">
               <div class="rounded-md  -space-y-px">
-                <div class="grid gap-6">
+                <div class="grid gap-6 mb-6">
                   <div class="col-span-12">
-                    <input placeholder="Email" type="text" name="email" id="email" autocomplete="email"
+                    <input placeholder="Email" type="email" name="email" id="email" autocomplete="email"
                       class="text-green_dark border-b-2 border-gray-500 mt-1 h-10 outline-none block w-full  sm:text-sm ">
                   </div>
 
@@ -394,7 +455,12 @@
                       class="mb-4 text-green_dark border-b-2 outline-none border-gray-500 mt-1 h-10 block w-full sm:text-sm ">
                     <div id="error" class="text-red-400"></div>
                   </div>
+
+                  
                 </div>
+                <a onClick="recoverPassword();" href="#"
+        class="text-green_dark cursor-pointer underline sm:text-sm"> Esqueci minha senha
+        </a>
               </div>
 
 
@@ -1114,7 +1180,15 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
       <p class="text-green_light text-sm pl-2">Copyright &copy; 2021 Yô. All rights reserved.</p>
     </div>
   </footer> -->
+<script>
+  jQuery.extend(jQuery.validator.messages, {
+          required: '<span class="text-red-400 sm:text-sm">Este campo é obrigatório</span>',
+          email: '<span class="text-red-400 ">Por favor, digite um email válido.</span>',
+          min: jQuery.validator.format('<span class="error12 ">Por favor, digite um valor maior ou igual que {0}.</span>'),
+          max: jQuery.validator.format('<span class="error12 ">Por favor, digite um valor menor ou igual que {0}.</span>')
 
+        });
+</script>
 </body>
 
 </html>
