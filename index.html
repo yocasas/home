@@ -823,7 +823,7 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
           let dbResponse = x
           homesShow.find(".show_home").remove()
 
-          dbResponse.slice(-3).forEach(element => {
+          dbResponse.slice(0,3).forEach(element => {
 
             let imageUser = element["picturesS3Urls"]
 
