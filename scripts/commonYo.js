@@ -80,7 +80,7 @@ let checkCurrentUser = function () {
 
 }
 
-function numberWithCommas(x) {
+function numberWithPeriod(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 

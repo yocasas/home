@@ -849,7 +849,7 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
 
 
             let points = starsToPointsPerNight(element["multiplier"])
-            let pointsParsed = numberWithCommas(points)
+            let pointsParsed = numberWithPeriod(points)
 
             homeClone.find('#points').text(pointsParsed);
             homeClone.removeClass("hidden");
