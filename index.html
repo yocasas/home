@@ -28,16 +28,26 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V0C85S2RG3"></script>
   <script>
-       window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        
+    let redirectUrl
 
-        gtag('config', 'G-V0C85S2RG3');
-        checkCurrentUser()
-        
-        if(clientInfo) gtag('set', {'id': clientInfo.ClientId.substring(7)});
-        
+    function checkUrlRedirect() {
+      const urlParams = new URLSearchParams(window.location.search);
+      redirectUrl = urlParams.get('redirectUrl');
+      if (redirectUrl != undefined && redirectUrl != "") {
+        toggleModal()
+      }
+    }
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+
+    gtag('config', 'G-V0C85S2RG3');
+    checkCurrentUser()
+
+    if (clientInfo) gtag('set', { 'id': clientInfo.ClientId.substring(7) });
+
   </script>
 
   <script>
@@ -65,6 +75,7 @@
 
     $(document).ready(function () {
 
+      checkUrlRedirect()
       var myCookie = getCookie("login_session");
 
 
@@ -72,9 +83,9 @@
       if (myCookie == null) {
       }
       else {
-        
+
         var tokens = myCookie.split(".");
-        
+
         getUserInfo(myCookie).then(userPoints => {
           $("#pointsUser").text(userPoints)
         })
@@ -98,7 +109,7 @@
           $(".login-button").hide()
           $(".usuario-button").show()
 
-          
+
           selectedModal = '.modalWarning' //TODO: POPUP - arrumar
           toggleModal(selectedModal) //TODO: POPUP - arrumar
 
@@ -109,12 +120,12 @@
           $(".login-button, .cadastro-button").hide()
           $(".usuario-button, .explorar-button").show()
 
-        
+
 
         }
 
 
-        
+
 
       }
 
@@ -124,14 +135,14 @@
 
     function recoverPassword() {
       $('html, body').css({
-            overflow: 'hidden',
-            height: '100%'
-          });
+        overflow: 'hidden',
+        height: '100%'
+      });
 
-          $(".loading").parent().removeClass('hidden')
+      $(".loading").parent().removeClass('hidden')
 
       var validator = $('#loginForms').validate()
-       if (validator.element("#email")) {
+      if (validator.element("#email")) {
 
         data = {
           email: $("#email").val()
@@ -139,70 +150,70 @@
 
         data = JSON.stringify(data)
         $.ajax({
-                url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/recoverpassword",
-                type: 'POST',
-                data:data,
-                "contentType": "application/json",
-                success: function (data1, textStatus, jqXHR) {
+          url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/recoverpassword",
+          type: 'POST',
+          data: data,
+          "contentType": "application/json",
+          success: function (data1, textStatus, jqXHR) {
 
-                  $('html, body').css({
-                overflow: 'auto',
-                height: 'auto'
-              });
-              $(".loading").parent().addClass('hidden')
+            $('html, body').css({
+              overflow: 'auto',
+              height: 'auto'
+            });
+            $(".loading").parent().addClass('hidden')
 
-                    alert('Você solicitou a recuperação da sua senha. Caso o seu e-mail esteja cadastrado, você receberá uma mensagem com as instruções sobre como redefini-la.');
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
+            alert('Você solicitou a recuperação da sua senha. Caso o seu e-mail esteja cadastrado, você receberá uma mensagem com as instruções sobre como redefini-la.');
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
 
-                  $('html, body').css({
-                overflow: 'auto',
-                height: 'auto'
-              });
-              $(".loading").parent().addClass('hidden')
-              
-                    alert('Você solicitou a recuperação da sua senha. Caso o seu e-mail esteja cadastrado, você receberá uma mensagem com as instruções sobre como redefini-la.');
-    
-    
-                },
-            })
+            $('html, body').css({
+              overflow: 'auto',
+              height: 'auto'
+            });
+            $(".loading").parent().addClass('hidden')
 
-       } else {
+            alert('Você solicitou a recuperação da sua senha. Caso o seu e-mail esteja cadastrado, você receberá uma mensagem com as instruções sobre como redefini-la.');
+
+
+          },
+        })
+
+      } else {
         $('html, body').css({
-                overflow: 'auto',
-                height: 'auto'
-              });
-              $(".loading").parent().addClass('hidden')
-       }
+          overflow: 'auto',
+          height: 'auto'
+        });
+        $(".loading").parent().addClass('hidden')
+      }
 
-      
+
     }
 
 
     function getUserInfo(token) {
-    return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
 
 
 
         let data = {}
         let clientObject = {}
         if (token) {
-            if (typeof (token) === typeof ("string")) {
-                var tokens = token.split(".");
+          if (typeof (token) === typeof ("string")) {
+            var tokens = token.split(".");
 
-                // console.log(atob(tokens[0])); //Alg, Type
-                clientObject = JSON.parse(atob(tokens[1])) //Id, ClientType, Iat, exp
-
-
-
-            }
+            // console.log(atob(tokens[0])); //Alg, Type
+            clientObject = JSON.parse(atob(tokens[1])) //Id, ClientType, Iat, exp
 
 
-            var clientId = clientObject.ClientId
-            // objFormUser["ClientId"] = clientId
-            data = {
-                "ClientId": clientId
-            }
+
+          }
+
+
+          var clientId = clientObject.ClientId
+          // objFormUser["ClientId"] = clientId
+          data = {
+            "ClientId": clientId
+          }
 
         }
 
@@ -210,33 +221,33 @@
         data = JSON.stringify(data)
 
         $.ajax({
-            url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/getuser",
-            type: 'POST',
-            data: data,
-            headers: {
-                'Authorization': token,
-            },
-            "contentType": "application/json",
-            success: function (data1, textStatus, jqXHR) {
-                let element = data1
-                if (`${element["terms"]}` == 'undefined' || `${element["privacy"]}` == 'undefined') {
-                  window.location.href = "https://yocasas.com.br/onboarding/";
+          url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/getuser",
+          type: 'POST',
+          data: data,
+          headers: {
+            'Authorization': token,
+          },
+          "contentType": "application/json",
+          success: function (data1, textStatus, jqXHR) {
+            let element = data1
+            if (`${element["terms"]}` == 'undefined' || `${element["privacy"]}` == 'undefined') {
+              window.location.href = "https://yocasas.com.br/onboarding/";
 
 
 
-                }
-                resolve(`${element["points"]}`)
+            }
+            resolve(`${element["points"]}`)
 
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
 
-            },
+          },
         })
 
 
-    })
-}
+      })
+    }
 
   </script>
 
@@ -246,11 +257,11 @@
 <body class="antialiased text-gray-800 font-niveau">
 
   <div class="flex justify-end">
-  <h1 class="fixed z-50 my-64">
-    <span class="sr-only">Badge Beta</span>
-    <img src="assets/badge_beta.svg" class="h-32">
-  </h1>
-</div>
+    <h1 class="fixed z-50 my-64">
+      <span class="sr-only">Badge Beta</span>
+      <img src="assets/badge_beta.svg" class="h-32">
+    </h1>
+  </div>
 
   <div class="hidden absolute bg-gray-900 bg-opacity-50 z-30 w-full h-full flex justify-center items-center">
     <div class="loading dot-pulse">
@@ -260,7 +271,7 @@
 
   <header style="background-image: url('HEADER_FOTO.jpg');"
     class="relative bg-no-repeat bg-cover p-10 md:p-4  z-5 bg-bottom lg:bg-center">
-    
+
 
     <!-- <svg class="fixed" width="400" height="110">
       <rect width="40" height="300" class="text-white fill-current rounded-full" />
@@ -387,6 +398,12 @@
               });
               $(".loading").parent().addClass('hidden')
 
+              if (redirectUrl != "" && redirectUrl != undefined) {
+                window.location.href = redirectUrl
+              } else {
+                window.location.reload();
+              }
+
 
               window.location.reload();
             },
@@ -450,11 +467,11 @@
                     <div id="error" class="text-red-400"></div>
                   </div>
 
-                  
+
                 </div>
-                <a onClick="recoverPassword();" href="#"
-        class="text-green_dark cursor-pointer underline sm:text-sm"> Esqueci minha senha
-        </a>
+                <a onClick="recoverPassword();" href="#" class="text-green_dark cursor-pointer underline sm:text-sm">
+                  Esqueci minha senha
+                </a>
               </div>
 
 
@@ -486,43 +503,44 @@
 
 
 
-<!-- Modal aviso de registro -->
+      <!-- Modal aviso de registro -->
       <div
-      class="modalWarning opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-20">
-      <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        class="modalWarning opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-20">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
 
-      <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg z-50 overflow-y-auto">
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg z-50 overflow-y-auto">
 
 
 
-        <!-- Add margin if you want to see some of the overlay behind the modal-->
-        <div class="modal-content py-4 text-left px-6">
-          <!--Title-->
-          <div class="flex justify-between items-center pb-3">
-            <p class="text-sm font-bold text-green_dark mx-auto">Aviso!</p>
-            <div class="modal-close cursor-pointer z-50">
-              <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                viewBox="0 0 18 18">
-                <path
-                  d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
-                </path>
-              </svg>
+          <!-- Add margin if you want to see some of the overlay behind the modal-->
+          <div class="modal-content py-4 text-left px-6">
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3">
+              <p class="text-sm font-bold text-green_dark mx-auto">Aviso!</p>
+              <div class="modal-close cursor-pointer z-50">
+                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                  viewBox="0 0 18 18">
+                  <path
+                    d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                  </path>
+                </svg>
+              </div>
             </div>
+
+            <!--Body-->
+
+            <div class="text-center text-green_dark leading-relaxed">
+              Termine de preencher o seu cadastro. Caso já tenha finalizado, enviaremos um e-mail de aprovação.
+              Para finalizar o preenchimento, <a onclick="location.href='/onboarding'"
+                class="cursor-pointer underline">clique aqui</a>.
+            </div>
+
+            <!--Footer-->
+
+
           </div>
-
-          <!--Body-->
-          
-          <div class="text-center text-green_dark leading-relaxed">
-            Termine de preencher o seu cadastro. Caso já tenha finalizado, enviaremos um e-mail de  aprovação. 
-Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="cursor-pointer underline">clique aqui</a>.
-          </div>
-
-          <!--Footer-->
-
-
         </div>
       </div>
-    </div>
 
 
 
@@ -566,11 +584,11 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
             modalArgs = selectedModal
           }
 
-          
+
           console.log(modalArgs)
-          
-        
-          if(!modalArgs || typeof(modalArgs) != "string" || modalArgs == "") {
+
+
+          if (!modalArgs || typeof (modalArgs) != "string" || modalArgs == "") {
             modalArgs = '.modal'
 
           }
@@ -581,8 +599,8 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
           modal.classList.toggle('pointer-events-none')
           body.classList.toggle('modal-active')
 
-          if (typeof(modalArgs) != "object") selectedModal = modalArgs
-        
+          if (typeof (modalArgs) != "object") selectedModal = modalArgs
+
 
         }
 
@@ -635,14 +653,14 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
           </a>
 
           <div id="parentPoints"
-          class="flex justify-between text-base  border-t border-green_light cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
-          Pontuação: <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div>
-        </div>
+            class="flex justify-between text-base  border-t border-green_light cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
+            Pontuação: <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div>
+          </div>
 
         </div>
       </div>
 
-      
+
     </div>
 
 
@@ -653,8 +671,8 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
       <h2 class="lg:text-2xl text-xl text-white leading-none mb-4 text-center">Yô é um clube exclusivo para troca de
         casas.</h2>
       <a href="/onboarding"
-      class="cadastro-button bg-green_light px-10 py-3 rounded-full  hover:bg-green_detail hover:border-green_detail text-center border-4 border-green_light text-green_dark">Quero
-      fazer parte</a>
+        class="cadastro-button bg-green_light px-10 py-3 rounded-full  hover:bg-green_detail hover:border-green_detail text-center border-4 border-green_light text-green_dark">Quero
+        fazer parte</a>
       <a href="/dashboard/buscador/"
         class="explorar-button hidden bg-green_light px-10 py-3 rounded-full hover:bg-green_detail hover:border-green_detail text-center border-4 border-green_light text-green_dark">Explorar</a>
 
@@ -782,7 +800,7 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
       }
 
       function getS3file(name, image, element) {
-        
+
         if (element.b64img == undefined) {
           $.ajax({
             url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile",
@@ -804,8 +822,8 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
           image.attr("src", element.b64img)
           image.removeClass("hidden")
 
-    
-          
+
+
 
 
 
@@ -823,7 +841,7 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
           let dbResponse = x
           homesShow.find(".show_home").remove()
 
-          dbResponse.slice(0,3).forEach(element => {
+          dbResponse.slice(0, 3).forEach(element => {
 
             let imageUser = element["picturesS3Urls"]
 
@@ -832,15 +850,15 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
 
             homeClone.find('#nickName').text(element["nickName"]);
             let locationChange = ''
-            
 
-            if(`${element["state"]}` != "") {
+
+            if (`${element["state"]}` != "") {
               locationChange = `${element["state"]}`
             } else {
               console.log(`${element["country"]}`)
               locationChange = `${element["country"]}`
             }
-            homeClone.find('#Location').text(`${element["city"]}, `+locationChange+``);
+            homeClone.find('#Location').text(`${element["city"]}, ` + locationChange + ``);
             let stars = range(element["multiplier"], 1)
             homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
             stars.forEach(startId => {
@@ -880,7 +898,7 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
             <div class="dot-pulse">
             </div>
           </div>
-          
+
           <div class="object-center h-4/6">
             <img class="zoom rounded w-full mb-2 object-cover h-64 hidden flex" loading="lazy" id="img_source" src="" />
           </div>
@@ -1106,35 +1124,39 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
         <div class="flex sm:flex-row flex-col items-center sm:justify-between w-full">
 
           <div class="sm:flex sm:flex-row mb-10">
-            <h5 class="text-green_light mb-2 text-lg">Entre em contato conosco através do email:&nbsp;<h5 class="text-green_light font-bold text-lg">contato@yocasas.com.br</h5>
+            <h5 class="text-green_light mb-2 text-lg">Entre em contato conosco através do email:&nbsp;<h5
+                class="text-green_light font-bold text-lg">contato@yocasas.com.br</h5>
             </h5>
           </div>
 
           <div class="flex sm:flex-row flex-col justify-center sm:justify-between sm:w-1/12">
-          <a class="my-6 mx-1 sm:my-0 sm:mx-0" href="https://wa.me/5511991379972">
-            <h1>
-              <span class="sr-only">Whats App</span>
-              <img src="assets/whatsapp.svg" class="h-10 ">
-            </h1>
-          </a>
+            <a class="my-6 mx-1 sm:my-0 sm:mx-0" href="https://wa.me/5511991379972">
+              <h1>
+                <span class="sr-only">Whats App</span>
+                <img src="assets/whatsapp.svg" class="h-10 ">
+              </h1>
+            </a>
 
-          <a class="sm:-my-1 " href="https://www.instagram.com/yo_trocadecasas/">
-            <h1>
-              <span class="sr-only">Instagram</span>
-              <img src="assets/instagram.svg" class="h-16 ">
-            </h1>
-          </a>
+            <a class="sm:-my-1 " href="https://www.instagram.com/yo_trocadecasas/">
+              <h1>
+                <span class="sr-only">Instagram</span>
+                <img src="assets/instagram.svg" class="h-16 ">
+              </h1>
+            </a>
           </div>
 
         </div>
 
         <ul class="leading-loose sm:flex sm:flex-row sm:justify-between sm:w-2/5 w-full">
-          <li><a onclick="location.href='/onboarding'" class="cursor-pointer sm:text-sm text-xl text-green_light hover:underline"
-              href="#">Cadastro</a></li>
-          <li><a class="cursor-pointer text-green_light hover:underline sm:text-sm text-xl" href="/home/assets/tabela.pdf" target="_blank">Regras
+          <li><a onclick="location.href='/onboarding'"
+              class="cursor-pointer sm:text-sm text-xl text-green_light hover:underline" href="#">Cadastro</a></li>
+          <li><a class="cursor-pointer text-green_light hover:underline sm:text-sm text-xl"
+              href="/home/assets/tabela.pdf" target="_blank">Regras
               e pontuação Yô</a></li>
-          <li><a class="cursor-pointer text-green_light hover:underline sm:text-sm text-xl" href="/legal/privacy" target="_blank">Política de privacidade</a></li>
-          <li><a class="cursor-pointer text-green_light hover:underline sm:text-sm text-xl" href="/legal/terms" target="_blank">Termos e Condições</a></li>
+          <li><a class="cursor-pointer text-green_light hover:underline sm:text-sm text-xl" href="/legal/privacy"
+              target="_blank">Política de privacidade</a></li>
+          <li><a class="cursor-pointer text-green_light hover:underline sm:text-sm text-xl" href="/legal/terms"
+              target="_blank">Termos e Condições</a></li>
 
         </ul>
 
@@ -1185,15 +1207,15 @@ Para finalizar o preenchimento, <a onclick="location.href='/onboarding'" class="
       <p class="text-green_light text-sm pl-2">Copyright &copy; 2021 Yô. All rights reserved.</p>
     </div>
   </footer> -->
-<script>
-  jQuery.extend(jQuery.validator.messages, {
-          required: '<span class="text-red-400 sm:text-sm">Este campo é obrigatório</span>',
-          email: '<span class="text-red-400 ">Por favor, digite um email válido.</span>',
-          min: jQuery.validator.format('<span class="error12 ">Por favor, digite um valor maior ou igual que {0}.</span>'),
-          max: jQuery.validator.format('<span class="error12 ">Por favor, digite um valor menor ou igual que {0}.</span>')
+  <script>
+    jQuery.extend(jQuery.validator.messages, {
+      required: '<span class="text-red-400 sm:text-sm">Este campo é obrigatório</span>',
+      email: '<span class="text-red-400 ">Por favor, digite um email válido.</span>',
+      min: jQuery.validator.format('<span class="error12 ">Por favor, digite um valor maior ou igual que {0}.</span>'),
+      max: jQuery.validator.format('<span class="error12 ">Por favor, digite um valor menor ou igual que {0}.</span>')
 
-        });
-</script>
+    });
+  </script>
 </body>
 
 </html>
