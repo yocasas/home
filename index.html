@@ -85,8 +85,8 @@
       else {
 
         var tokens = myCookie.split(".");
-
-        getUserInfo(myCookie).then(userPoints => {
+        checkCurrentUser()
+        getUserPoints().then(userPoints => {
           $("#pointsUser").text(userPoints)
         })
 
@@ -233,7 +233,6 @@
             let element = data1
             if (`${element["terms"]}` == 'undefined' || `${element["privacy"]}` == 'undefined') {
               window.location.href = "https://yocasas.com.br/onboarding/";
-
 
 
             }
@@ -647,15 +646,16 @@
           <!-- <a href="#" class="block px-4 py-2 text-base capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Painel
           </a> -->
+
+          <a id="parentPoints" onclick="location.href='/usuario'"
+            class="flex justify-between text-base   cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
+            Pontuação: <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div>
+        </a>
+
           <a href="https://yocasas.com.br/home/index.html" onclick="removeCookie()"
-            class="block px-4 py-2 text-base capitalize text-gray-700 hover:bg-green_light hover:text-black">
+            class="block px-4 py-2 text-base capitalize border-t border-green_light text-gray-700 hover:bg-green_light hover:text-black">
             Log out
           </a>
-
-          <div id="parentPoints"
-            class="flex justify-between text-base  border-t border-green_light cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
-            Pontuação: <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div>
-          </div>
 
         </div>
       </div>
