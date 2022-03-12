@@ -150,8 +150,14 @@
         }
 
         data = JSON.stringify(data)
+
+        let recoverPasswordUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/recoverpassword"
+
+        if (devMode) {
+          recoverPasswordUri = "https://8e9nbq8rj1.execute-api.us-east-2.amazonaws.com/DEV/recoverpassword"
+        }
         $.ajax({
-          url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/recoverpassword",
+          url: recoverPasswordUri,
           type: 'POST',
           data: data,
           "contentType": "application/json",
@@ -221,8 +227,14 @@
         //TODO: Usar os headers e nao clientid como argumento
         data = JSON.stringify(data)
 
+        let getUserUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/getuser"
+
+        if (devMode) {
+          getUserUri = "https://wuixd5ec4b.execute-api.us-east-2.amazonaws.com/DEV/getuser"
+        }
+
         $.ajax({
-          url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/getuser",
+          url: getUserUri,
           type: 'POST',
           data: data,
           headers: {
@@ -385,8 +397,14 @@
 
           $(".loading").parent().removeClass('hidden')
 
+          let loginUri = "https://8e9nbq8rj1.execute-api.us-east-2.amazonaws.com/DEV/login"
+
+          if (devMode) {
+            loginUri = "https://wuixd5ec4b.execute-api.us-east-2.amazonaws.com/DEV/getuser"
+          }
+
           $.ajax({
-            url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/login",
+            url: loginUri,
             type: 'POST',
             data: data,
             "contentType": "application/json",
@@ -802,8 +820,13 @@
       function getS3file(name, image, element) {
 
         if (element.b64img == undefined) {
+          let getFileS3Uri = "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile"
+
+                    if (devMode) {
+                      getFileS3Uri = "https://5mpfn9a77j.execute-api.us-east-2.amazonaws.com/DEV/s3/getFile/v3"
+                    }
           $.ajax({
-            url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile",
+            url: getFileS3Uri,
             type: "POST",
             data: JSON.stringify({
               "pic-name": name
@@ -831,8 +854,14 @@
       }
 
       let homesShow = $("#homes_show")
+
+      let getHomesDetaileduri = "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/gethomes/detailed"
+
+      if (devMode) {
+        getHomesDetaileduri = "https://5mpfn9a77j.execute-api.us-east-2.amazonaws.com/DEV/gethomes/detailed"
+      }
       $.ajax({
-        url: "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/gethomes",
+        url: getHomesDetaileduri,
         type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json",

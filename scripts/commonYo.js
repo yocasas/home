@@ -2,6 +2,9 @@ let clientInfo
 
 let authCookie
 
+let devMode
+
+
 function capitalizeFirstLetter(string) {
     console.log(string)
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -59,6 +62,9 @@ function getCookie(name) {
 
 
 let checkCurrentUser = function () {
+    if (getCookie("dev_mode_enable") != null && getCookie("dev_mode_enable") != undefined && getCookie("dev_mode_enable")=="yes") {
+        devMode = true
+    }
 
     let myCookie = getCookie("login_session");
 
@@ -137,6 +143,14 @@ let starsToPointsPerNight = function (multiplier) {
 
 function getUserPoints() {
     token = authCookie
+
+    if (token != null) {
+    let getUserPointsUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/points/get/summary"
+
+    if (devMode) {
+        getUserPointsUri = "https://8e9nbq8rj1.execute-api.us-east-2.amazonaws.com/DEV/points/get/summary"
+    }
+}
     return new Promise((resolve, reject) => {
 
 
@@ -167,7 +181,7 @@ function getUserPoints() {
         data = JSON.stringify(data)
 
         $.ajax({
-            url: "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/points/get/summary",
+            url: getUserPointsUri,
             type: 'POST',
             data: data,
             headers: {
