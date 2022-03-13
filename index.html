@@ -834,7 +834,7 @@
             contentType: "application/json",
             success: (x) => {
               image.parent().siblings().addClass('hidden')
-              element.b64img = `data:image/png;base64,${x}`
+              element.b64img = `${x}`
               image.attr("src", element.b64img)
               image.removeClass("hidden")
 
