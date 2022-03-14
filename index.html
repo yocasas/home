@@ -888,11 +888,26 @@
               locationChange = `${element["country"]}`
             }
             homeClone.find('#Location').text(`${element["city"]}, ` + locationChange + ``);
+
             let stars = range(element["multiplier"], 1)
             homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
+            
+            if (element["multiplier"] < 7 && element["multiplier"] > 2) {
             stars.forEach(startId => {
               homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
             })
+          } else if (element["multiplier"] == 2) {
+            homeClone.find('#rank').addClass('hidden')
+            homeClone.find('#2').removeClass('hidden')
+          } else if (element["multiplier"] == 7) {
+            stars.forEach(startId => {
+              homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
+            })
+            homeClone.find('#rank').find('#s7').removeClass('hidden')
+            homeClone.find('#rank').find('#s7').addClass('w-5 h-5')
+            homeClone.find('#rank').find('#s6').addClass('hidden')
+
+          }
 
 
             let points = starsToPointsPerNight(element["multiplier"])
@@ -982,8 +997,19 @@
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
             </svg>
-          </div>
 
+            <svg id="s7" class="hidden star_empty w-5 h-5 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+              <path id="Trazado_78005"
+                d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
+              </path>
+            </svg>
+
+          </div>
+          <div class="w-1/2 md:h-full items-end flex hidden" id="2">
+            <h1 class="text-md md:text-2xl usuario_font font-black">
+                EXPERIENCIA
+            </h1>
+        </div>
           <h1 class="text-green_medium font-medium text-3xl leading-snug" id="points">2.000</h1>
         </div>
 

@@ -71,3 +71,12 @@
 .zoom {
   transition: transform .2s; /* Animation */
 }
+
+.usuario_font {
+  white-space: nowrap;
+  font-family: Niveau Grotesk;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  color: rgba(69, 95, 93, 1);
+}
