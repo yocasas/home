@@ -2,7 +2,7 @@ let clientInfo
 
 let authCookie
 
-let devMode
+let devMode = false
 
 
 function capitalizeFirstLetter(string) {
@@ -142,13 +142,14 @@ let starsToPointsPerNight = function (multiplier) {
 }
 
 function getUserPoints() {
-    token = authCookie
 
-    if (token != null) {
+//     if (token != null) {
     
-}
+// }
     
     return new Promise((resolve, reject) => {
+    let token = authCookie
+
         let getUserPointsUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/points/get/summary"
 
     if (devMode) {
