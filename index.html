@@ -275,6 +275,22 @@
     </h1>
   </div>
 
+
+  <!--- REMOVER TODO REMOVER !!!!!!!!!1-->
+  <div class="w-10 h-full fixed hidden flex z-35" id="devModeShow">
+    <script>
+      $(document).ready(function () {
+        if (sessionStorage.getItem('devMode') == 'yes') {
+          console.log('hello')
+          $('#devModeShow').removeClass('hidden')
+        }
+      })
+    </script>
+    <div class="h-full ml-auto bg-blue-800 flex flex-col justify-around">
+      <p class="font-black text-white text-center align-middle">DEV MODE</p>
+    </div>
+  </div>
+
   <div class="hidden absolute bg-gray-900 bg-opacity-50 z-30 w-full h-full flex justify-center items-center">
     <div class="loading dot-pulse">
 
@@ -285,9 +301,7 @@
     class="relative bg-no-repeat bg-cover p-10 md:p-4  z-5 bg-bottom lg:bg-center">
 
 
-    <!-- <svg class="fixed" width="400" height="110">
-      <rect width="40" height="300" class="text-white fill-current rounded-full" />
-    </svg> -->
+    
 
     <div class="flex items-center flex-wrap justify-between mb-6 md:mb-0">
       <a href="yocasas.com.br/home">
