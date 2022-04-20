@@ -14,6 +14,9 @@
     crossorigin="anonymous" referrerpolicy="no-referrer">
   <!-- Link Swiper's CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@latest/dist/css/splide-extension-video.min.css">
+
   <title>Yô Home</title>
 
   <script type="text/javascript" src="scripts/commonYo.js"></script>
@@ -113,7 +116,7 @@
           selectedModal = '.modalWarning' //TODO: POPUP - arrumar
           toggleModal(selectedModal) //TODO: POPUP - arrumar
 
-        } 
+        }
         else if (clientType >= 2) {
           $('.usuario-button').removeClass('hidden');
           // $('.explorar-button').removeClass('hidden');
@@ -301,7 +304,7 @@
     class="relative bg-no-repeat bg-cover p-10 md:p-4  z-5 bg-bottom lg:bg-center">
 
 
-    
+
 
     <div class="flex items-center flex-wrap justify-between mb-6 md:mb-0">
       <a href="yocasas.com.br/home">
@@ -561,9 +564,9 @@
             <!--Body-->
 
             <div class="text-center text-green_dark leading-relaxed">
-              Termine de preencher o seu cadastro. Caso já tenha finalizado, enviaremos um e-mail de aprovação.
-              Para finalizar o preenchimento, <a onclick="location.href='/onboarding'"
-                class="cursor-pointer underline">clique aqui</a>.
+              Obrigado! Caso já tenha finalizado o preenchimento do cadastro, enviaremos um e-mail de aprovação. Se ainda precisar preencher algum campo,
+               <a onclick="location.href='/onboarding'"
+                class="cursor-pointer underline">clique aqui</a> para finalizar o preenchimento.
             </div>
 
             <!--Footer-->
@@ -682,7 +685,7 @@
           <a id="parentPoints" onclick="location.href='/usuario'"
             class="flex justify-between text-base   cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Pontuação: <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div>
-        </a>
+          </a>
 
           <a href="/home" onclick="removeCookie()"
             class="block px-4 py-2 text-base capitalize border-t border-green_light text-gray-700 hover:bg-green_light hover:text-black">
@@ -836,9 +839,9 @@
         if (element.b64img == undefined) {
           let getFileS3Uri = "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile/v3"
 
-                    if (devMode) {
-                      getFileS3Uri = "https://5mpfn9a77j.execute-api.us-east-2.amazonaws.com/DEV/s3/getFile/v3"
-                    }
+          if (devMode) {
+            getFileS3Uri = "https://5mpfn9a77j.execute-api.us-east-2.amazonaws.com/DEV/s3/getFile/v3"
+          }
           $.ajax({
             url: getFileS3Uri,
             type: "POST",
@@ -905,23 +908,23 @@
 
             let stars = range(element["multiplier"], 1)
             homeClone.attr("onclick", `location.href='/dashboard/casa/detalhes/?homeId=${element['homeId']}'`)
-            
-            if (element["multiplier"] < 7 && element["multiplier"] > 2) {
-            stars.forEach(startId => {
-              homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
-            })
-          } else if (element["multiplier"] == 2) {
-            homeClone.find('#rank').addClass('hidden')
-            homeClone.find('#2').removeClass('hidden')
-          } else if (element["multiplier"] == 7) {
-            stars.forEach(startId => {
-              homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
-            })
-            homeClone.find('#rank').find('#s7').removeClass('hidden')
-            homeClone.find('#rank').find('#s7').addClass('w-5 h-5')
-            homeClone.find('#rank').find('#s6').addClass('hidden')
 
-          }
+            if (element["multiplier"] < 7 && element["multiplier"] > 2) {
+              stars.forEach(startId => {
+                homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
+              })
+            } else if (element["multiplier"] == 2) {
+              homeClone.find('#rank').addClass('hidden')
+              homeClone.find('#2').removeClass('hidden')
+            } else if (element["multiplier"] == 7) {
+              stars.forEach(startId => {
+                homeClone.find('#rank').find(`#s${startId}`).attr("class", "fill-current w-4 h-4 text-green_medium mr-1");
+              })
+              homeClone.find('#rank').find('#s7').removeClass('hidden')
+              homeClone.find('#rank').find('#s7').addClass('w-5 h-5')
+              homeClone.find('#rank').find('#s6').addClass('hidden')
+
+            }
 
 
             let points = starsToPointsPerNight(element["multiplier"])
@@ -1012,7 +1015,8 @@
               </path>
             </svg>
 
-            <svg id="s7" class="hidden star_empty w-5 h-5 text-green_medium mr-1" viewBox="782.018 421.902 23.963 22.79">
+            <svg id="s7" class="hidden star_empty w-5 h-5 text-green_medium mr-1"
+              viewBox="782.018 421.902 23.963 22.79">
               <path id="Trazado_78005"
                 d="M 794 421.9017639160156 L 797.7025146484375 429.4039001464844 L 805.9816284179688 430.60693359375 L 799.9908447265625 436.446533203125 L 801.405029296875 444.6921997070312 L 794 440.7991333007812 L 786.594970703125 444.6921997070312 L 788.0091552734375 436.446533203125 L 782.0183715820312 430.60693359375 L 790.2974853515625 429.4039001464844 L 794 421.9017639160156 Z">
               </path>
@@ -1021,9 +1025,9 @@
           </div>
           <div class="w-1/2 md:h-full items-end flex hidden" id="2">
             <h1 class="text-md md:text-2xl usuario_font font-black">
-                EXPERIENCIA
+              EXPERIENCIA
             </h1>
-        </div>
+          </div>
           <h1 class="text-green_medium font-medium text-3xl leading-snug" id="points">2.000</h1>
         </div>
 
@@ -1159,9 +1163,120 @@
   </div>-->
 
   <div>
-    <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/688835027?h=01bb5ef4b7&amp;badge=0&amp;autoplay=false&amp;player_id=0&amp;app_id=58479&amp;loop=true" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Y&amp;ocirc; grande Full HD"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+    <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+        src="https://player.vimeo.com/video/688835027?h=01bb5ef4b7&amp;badge=0&amp;autoplay=false&amp;player_id=0&amp;app_id=58479&amp;loop=true"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+        style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Y&amp;ocirc; grande Full HD"></iframe>
+    </div>
+    <script src="https://player.vimeo.com/api/player.js"></script>
   </div>
 
+  <!-- <link rel="stylesheet" href="path-to-the-css/splide-extension-video.min.css"> -->
+<style> 
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+  position: absolute;
+  left: 16px;
+  bottom: 120px;
+  @media (min-width: 640px) {
+    bottom: 25px;
+
+  }
+}
+</style>
+  <div class="splide" id="primary-slider">
+    <div class="splide__track">
+      <ul class="splide__list">
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701344126">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_1.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">A troca de casas é uma boa ideia para mim?</div>
+          </div>
+
+        </li>
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701344060">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_2.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">Eu preciso ter uma casa para cadastrar e fazer parte do site?</div>
+          </div>
+
+        </li>
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343946">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_3.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">Como faço para cadastrar minha casa?</div>
+          </div>
+        </li>
+
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343846">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_4.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">Qualquer casa pode ser cadastrada?</div>
+          </div>
+        </li>
+
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343727">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_5.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">As casas passam por uma curadoria? Como é feita a classificação?</div>
+          </div>
+        </li>
+
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343369">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_6.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">Preciso disponibilizar a minha casa no site?</div>
+          </div>
+        </li>
+
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343541">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_7.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">As trocas de casas precisam ser recíprocas?</div>
+          </div>
+        </li>
+
+        <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343663">
+          <div class="container h-64">
+            <img src="assets/thumbnails/t_8.jpg">
+            <div class="bottom-left text-green_dark text-sm sm:text-2xl font-bold break-normal">Posso ficar em uma casa de categoria diferente da minha?</div>
+          </div>
+        </li>
+
+        <!-- <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343663">
+          <img src="jeff.jpg">
+        </li> -->
+
+      </ul>
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/js/splide.min.js"></script>
+<!-- <script src="//cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@0.4.6/dist/js/splide-extension-video.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@0.7.1/dist/js/splide-extension-video.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@1.3.3/dist/js/splide.min.js"></script> -->
+  <script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+        var splide = new Splide('#primary-slider', {
+          type: 'loop',
+          drag: 'free',
+          gap: 8,
+          perPage: 3,
+          video: {
+            disableFullScreen: false,
+            loop: false,
+    
+          },
+        })
+        splide.mount(window.splide.Extensions)
+      })
+      </script>
+    
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js"></script>
 
