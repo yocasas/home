@@ -12,7 +12,7 @@
     "jwt-decode": "^3.1.2",
     "tailwindcss": "^1.2.0"
   },
-  "homepage": "http://yocasas.github.io/home",
+  "homepage": "http://yocasas.github.io/home/",
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "concurrently": "^4.1.0",
