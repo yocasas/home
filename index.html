@@ -149,7 +149,7 @@
       if (validator.element("#email")) {
 
         data = {
-          email: $("#email").val()
+          email: $("#email").val().toLowerCase()
         }
 
         data = JSON.stringify(data)
@@ -344,6 +344,7 @@
           dataFormArray.forEach(x => {
             objForm[x.name] = x.value
           })
+          objForm['email'] = objForm['email'].toLowerCase()
 
           data = JSON.stringify(objForm)
 
