@@ -247,8 +247,7 @@
           success: function (data1, textStatus, jqXHR) {
             let element = data1
             if (`${element["terms"]}` == 'undefined' || `${element["privacy"]}` == 'undefined') {
-              window.location.href = "https://yocasas.com.br/onboarding/";
-
+              window.location.href = "/onboarding/";
 
             }
             resolve(`${element["points"]}`)
@@ -307,7 +306,7 @@
 
 
     <div class="flex items-center flex-wrap justify-between mb-6 md:mb-0">
-      <a href="yocasas.com.br/home/">
+      <a onclick="location.href='/home/'">
         <h1>
           <span class="sr-only">Yo</span>
               <img src="LOGO.svg" class="h-20 flex-1">
