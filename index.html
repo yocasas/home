@@ -149,7 +149,7 @@
       if (validator.element("#email")) {
 
         data = {
-          email: $("#email").val()
+          email: $("#email").val().toLowerCase()
         }
 
         data = JSON.stringify(data)
@@ -247,8 +247,7 @@
           success: function (data1, textStatus, jqXHR) {
             let element = data1
             if (`${element["terms"]}` == 'undefined' || `${element["privacy"]}` == 'undefined') {
-              window.location.href = "https://yocasas.com.br/onboarding/";
-
+              window.location.href = "/onboarding/";
 
             }
             resolve(`${element["points"]}`)
@@ -307,7 +306,7 @@
 
 
     <div class="flex items-center flex-wrap justify-between mb-6 md:mb-0">
-      <a href="yocasas.com.br/home/">
+      <a onclick="location.href='/home/'">
         <h1>
           <span class="sr-only">Yo</span>
               <img src="LOGO.svg" class="h-20 flex-1">
@@ -344,6 +343,7 @@
           dataFormArray.forEach(x => {
             objForm[x.name] = x.value
           })
+          objForm['email'] = objForm['email'].toLowerCase()
 
           data = JSON.stringify(objForm)
 
@@ -646,7 +646,7 @@
       <h2 class="lg:text-5xl text-3xl font-bold text-white leading-none mb-6 md:mb-2">Seja bem-vindo</h2>
       <h2 class="lg:text-2xl text-xl text-white leading-none mb-4 text-center">Yô é um clube exclusivo para troca de
         casas.</h2>
-      <a href="/onboarding"
+      <a href="/onboarding/"
         class="cadastro-button bg-green_light px-10 py-3 mb-6 rounded-full  hover:bg-green_detail hover:border-green_detail text-center border-4 border-green_light text-green_dark">Quero
         fazer parte</a>
       <a href="/dashboard/buscador/"
