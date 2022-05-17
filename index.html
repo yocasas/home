@@ -19,8 +19,7 @@
 
   <title>Yô Home</title>
 
-  <script type="text/javascript" src="https://raw.githubusercontent.com/yocasas/dashboard/master/js/commonYo.js"></script>
-
+  <script src="https://yocasas.github.io/dashboard/js/commonYo.js"></script>
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
@@ -47,7 +46,7 @@
 
 
     gtag('config', 'G-V0C85S2RG3');
-    checkCurrentUser()
+    checkCurrentUserNoBlock()
 
     if (clientInfo) gtag('set', { 'id': clientInfo.ClientId.substring(7) });
 
@@ -77,8 +76,9 @@
     }
 
     $(document).ready(function () {
+      
 
-      checkUrlRedirect()
+      // checkUrlRedirect()
       var myCookie = getCookie("login_session");
 
 
@@ -88,7 +88,7 @@
       else {
 
         var tokens = myCookie.split(".");
-        checkCurrentUser()
+        checkCurrentUserNoBlock()
         getUserPoints().then(userPoints => {
           $("#pointsUser").text(userPoints)
         })
