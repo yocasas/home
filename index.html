@@ -783,7 +783,7 @@
           let getFileS3Uri = "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/s3/getFile/v3"
 
           if (devMode) {
-            getFileS3Uri = "https://5mpfn9a77j.execute-api.us-east-2.amazonaws.com/DEV/s3/getFile/v3"
+            getFileS3Uri = `${getCurrentHomeBaseUri()}/s3/getFile/v3`
           }
           $.ajax({
             url: getFileS3Uri,
@@ -818,7 +818,7 @@
       let getHomesduri = "https://of5h69nvm8.execute-api.us-east-1.amazonaws.com/dev/gethomes"
 
       if (devMode) {
-        getHomesduri = "https://5mpfn9a77j.execute-api.us-east-2.amazonaws.com/DEV/gethomes"
+        getHomesduri = `${getCurrentHomeBaseUri()}/gethomes`
       }
       $.ajax({
         url: getHomesduri,
