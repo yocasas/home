@@ -150,7 +150,7 @@ function getUserPoints() {
     return new Promise((resolve, reject) => {
     let token = authCookie
 
-        let getUserPointsUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/points/get/summary"
+        let getUserPointsUri = "`${getCurrentUserBaseUri()}`/points/get/summary"
 
     if (devMode) {
         getUserPointsUri = "https://8e9nbq8rj1.execute-api.us-east-2.amazonaws.com/DEV/points/get/summary"
