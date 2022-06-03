@@ -155,11 +155,9 @@
 
         data = JSON.stringify(data)
 
-        let recoverPasswordUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/recoverpassword"
+        let recoverPasswordUri = `${getCurrentUserBaseUri()}/recoverpassword`
 
-        if (devMode) {
-          recoverPasswordUri = "https://8e9nbq8rj1.execute-api.us-east-2.amazonaws.com/DEV/recoverpassword"
-        }
+        
         $.ajax({
           url: recoverPasswordUri,
           type: 'POST',
@@ -231,11 +229,9 @@
         //TODO: Usar os headers e nao clientid como argumento
         data = JSON.stringify(data)
 
-        let getUserUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/getuser"
+        let getUserUri = `${getCurrentUserBaseUri()}/getuser`
 
-        if (devMode) {
-          getUserUri = "https://wuixd5ec4b.execute-api.us-east-2.amazonaws.com/DEV/getuser"
-        }
+        
 
         $.ajax({
           url: getUserUri,
@@ -356,11 +352,9 @@
 
           $(".loading").parent().removeClass('hidden')
 
-          let loginUri = "https://044er6jwuc.execute-api.us-east-1.amazonaws.com/dev-2/login"
+          let loginUri = `${getCurrentUserBaseUri()}/login`
 
-          if (devMode) {
-            loginUri = "https://8e9nbq8rj1.execute-api.us-east-2.amazonaws.com/DEV/login"
-          }
+          
 
           $.ajax({
             url: loginUri,
@@ -782,9 +776,7 @@
         if (element.b64img == undefined) {
           let getFileS3Uri = `${getCurrentHomeBaseUri()}/s3/getFile/v3`
 
-          if (devMode) {
-            getFileS3Uri = `${getCurrentHomeBaseUri()}/s3/getFile/v3`
-          }
+          
           $.ajax({
             url: getFileS3Uri,
             type: "POST",
@@ -817,9 +809,7 @@
 
       let getHomesduri = `${getCurrentHomeBaseUri()}/gethomes`
 
-      if (devMode) {
-        getHomesduri = `${getCurrentHomeBaseUri()}/gethomes`
-      }
+      
       $.ajax({
         url: getHomesduri,
         type: "POST",
