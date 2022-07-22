@@ -15,7 +15,8 @@
   <!-- Link Swiper's CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@latest/dist/css/splide-extension-video.min.css">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@latest/dist/css/splide-extension-video.min.css">
 
   <title>Yô Home</title>
 
@@ -77,7 +78,7 @@
     }
 
     $(document).ready(function () {
-      
+
 
       // checkUrlRedirect()
       var myCookie = getCookie("login_session");
@@ -157,7 +158,7 @@
 
         let recoverPasswordUri = `${getCurrentUserBaseUri()}/recoverpassword`
 
-        
+
         $.ajax({
           url: recoverPasswordUri,
           type: 'POST',
@@ -231,7 +232,7 @@
 
         let getUserUri = `${getCurrentUserBaseUri()}/getuser`
 
-        
+
 
         $.ajax({
           url: getUserUri,
@@ -306,7 +307,7 @@
       <a onclick="location.href='/home/'">
         <h1>
           <span class="sr-only">Yo</span>
-              <img src="/dashboard/Assets/logo_light.svg" class="h-20 flex-1">
+          <img src="/dashboard/Assets/logo_light.svg" class="h-20 flex-1">
 
 
 
@@ -354,7 +355,7 @@
 
           let loginUri = `${getCurrentUserBaseUri()}/login`
 
-          
+
 
           $.ajax({
             url: loginUri,
@@ -500,9 +501,10 @@
             <!--Body-->
 
             <div class="text-center text-green_dark leading-relaxed">
-              Caso já tenha finalizado o preenchimento do cadastro, em breve entraremos em contato. Se ainda precisar preencher algum campo,
-               <a onclick="location.href='/onboarding/'"
-                class="cursor-pointer underline">clique aqui</a> para finalizar o preenchimento.
+              Caso já tenha finalizado o preenchimento do cadastro, em breve entraremos em contato. Se ainda precisar
+              preencher algum campo,
+              <a onclick="location.href='/onboarding/'" class="cursor-pointer underline">clique aqui</a> para finalizar
+              o preenchimento.
             </div>
 
             <!--Footer-->
@@ -606,9 +608,13 @@
             class="cursor-pointer block px-4 py-2 text-base capitalize text-gray-700 hover:bg-green_light hover:text-black">
             Editar Cadastro
           </a>
+          <a onclick="window.location.href=`${location.protocol}//${location.host}/onboarding/?calendarPage=true`"
+            class="cursor-pointer block px-4 py-2 text-base capitalize text-gray-700 hover:bg-green_light hover:text-black">
+            Incluir Nova Casa
+          </a>
           <a onclick="location.href='/usuario/residence/calendar/'"
             class="cursor-pointer block px-4 py-2 text-base capitalize text-gray-700 hover:bg-green_light hover:text-black">
-            Adicionar Datas
+            Selecionar Datas
           </a>
           <a onclick="location.href='/dashboard/chat/'"
             class="block cursor-pointer px-4 py-2 text-base capitalize text-gray-700 hover:bg-green_light hover:text-black">
@@ -619,10 +625,13 @@
           </a> -->
 
           <a id="parentPoints" onclick="location.href='/usuario/'"
-                        class="flex flex-col justify-between text-base font-normal   cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
-                        <div class="flex justify-between"><div>Pontuação:</div> <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div></div>
-                        <div class="text-sm text-green_medium">Ver histórico</div>
-                    </a>
+            class="flex flex-col justify-between text-base font-normal   cursor-pointer px-4 py-2 capitalize text-gray-700 hover:bg-green_light hover:text-black">
+            <div class="flex justify-between">
+              <div>Pontuação:</div>
+              <div id="pointsUser" class="font-bold mx-10 sm:mx-0 text-green_medium text-xl"></div>
+            </div>
+            <div class="text-sm text-green_medium">Ver histórico</div>
+          </a>
 
           <a href="/home/" onclick="removeCookie()"
             class="block px-4 py-2 text-base capitalize border-t border-green_light text-gray-700 hover:bg-green_light hover:text-black">
@@ -776,7 +785,7 @@
         if (element.b64img == undefined) {
           let getFileS3Uri = `${getCurrentHomeBaseUri()}/s3/getFile/v3`
 
-          
+
           $.ajax({
             url: getFileS3Uri,
             type: "POST",
@@ -809,7 +818,7 @@
 
       let getHomesduri = `${getCurrentHomeBaseUri()}/gethomes`
 
-      
+
       $.ajax({
         url: getHomesduri,
         type: "POST",
@@ -1007,49 +1016,51 @@
     </script>
 
 
-<div class="mb-10">
-  <div style="padding:56.25% 0 0 0;position:relative;"><iframe
-      src="https://player.vimeo.com/video/688835027?h=01bb5ef4b7&amp;badge=0&amp;autoplay=false&amp;player_id=0&amp;app_id=58479&amp;loop=true"
-      frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
-      style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Y&amp;ocirc; grande Full HD"></iframe>
-  </div>
-  <script src="https://player.vimeo.com/api/player.js"></script>
-</div>
+    <div class="mb-10">
+      <div style="padding:56.25% 0 0 0;position:relative;"><iframe
+          src="https://player.vimeo.com/video/688835027?h=01bb5ef4b7&amp;badge=0&amp;autoplay=false&amp;player_id=0&amp;app_id=58479&amp;loop=true"
+          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+          style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Y&amp;ocirc; grande Full HD"></iframe>
+      </div>
+      <script src="https://player.vimeo.com/api/player.js"></script>
+    </div>
 
-<style> 
-  .container {
-    position: relative;
-    text-align: center;
-    color: white;
-  }
-  
-  /* Bottom left text */
-  .bottom-left {
-    position: absolute;
-    left: 16px;
-    bottom: 120px;
-    @media (min-width: 640px) {
-      bottom: 25px;
-  
-    }
-  }
-  </style>
+    <style>
+      .container {
+        position: relative;
+        text-align: center;
+        color: white;
+      }
+
+      /* Bottom left text */
+      .bottom-left {
+        position: absolute;
+        left: 16px;
+        bottom: 120px;
+
+        @media (min-width: 640px) {
+          bottom: 25px;
+
+        }
+      }
+    </style>
     <div class="splide mb-10" id="primary-slider">
       <div class="splide__track">
         <ul class="splide__list">
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701344126">
             <div class="container h-64">
               <img src="assets/thumbnails/t_1.jpg">
-              <div class="bottom-left text-green_dark text-2xl font-bold break-normal">A troca de casas é uma boa ideia para mim?</div>
+              <div class="bottom-left text-green_dark text-2xl font-bold break-normal">A troca de casas é uma
+                boa ideia para mim?</div>
             </div>
-  
+
           </li>
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701344060">
             <div class="container h-64">
               <img src="assets/thumbnails/t_2.jpg">
               <div class="bottom-left text-green_dark text-2xl font-bold break-normal">Eu preciso ter uma casa para cadastrar e fazer parte do site?</div>
             </div>
-  
+
           </li>
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343946">
             <div class="container h-64">
@@ -1057,35 +1068,35 @@
               <div class="bottom-left text-green_dark text-2xl font-bold break-normal">Como faço para cadastrar minha casa?</div>
             </div>
           </li>
-  
+
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343846">
             <div class="container h-64">
               <img src="assets/thumbnails/t_4.jpg">
               <div class="bottom-left text-green_dark text-2xl font-bold break-normal">Qualquer casa pode ser cadastrada?</div>
             </div>
           </li>
-  
+
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343727">
             <div class="container h-64">
               <img src="assets/thumbnails/t_5.jpg">
               <div class="bottom-left text-green_dark text-2xl font-bold break-normal">As casas passam por uma curadoria? Como é feita a classificação?</div>
             </div>
           </li>
-  
+
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343369">
             <div class="container h-64">
               <img src="assets/thumbnails/t_6.jpg">
               <div class="bottom-left text-green_dark text-2xl font-bold break-normal">Preciso disponibilizar a minha casa no site?</div>
             </div>
           </li>
-  
+
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343541">
             <div class="container h-64">
               <img src="assets/thumbnails/t_7.jpg">
               <div class="bottom-left text-green_dark text-2xl font-bold break-normal">As trocas de casas precisam ser recíprocas?</div>
             </div>
           </li>
-  
+
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343663">
             <div class="container h-64">
               <img src="assets/thumbnails/t_8.jpg">
@@ -1173,22 +1184,24 @@
           <li class="splide__slide" data-splide-vimeo="https://vimeo.com/725686758">
             <div class="container h-64">
               <img src="assets/thumbnails/t_20.jpg">
-              <div class="bottom-left text-green_dark text-2xl font-bold break-normal">Como faço para deixar de fazer parte do Yô?</div>
+              <div class="bottom-left text-green_dark text-2xl font-bold break-normal">Como faço para deixar
+                de fazer parte do Yô?</div>
             </div>
           </li>
 
-          
-  
+
+
           <!-- <li class="splide__slide" data-splide-vimeo="https://vimeo.com/701343663">
             <img src="jeff.jpg">
           </li> -->
-  
+
         </ul>
       </div>
     </div>
     <script src="//cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/js/splide.min.js"></script>
-  <!-- <script src="//cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@0.4.6/dist/js/splide-extension-video.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@0.7.1/dist/js/splide-extension-video.min.js"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@0.4.6/dist/js/splide-extension-video.min.js"></script> -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-video@0.7.1/dist/js/splide-extension-video.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@1.3.3/dist/js/splide.min.js"></script> -->
     <script>
       
@@ -1212,7 +1225,9 @@
         })
         splide.mount(window.splide.Extensions)
       })
+
         </script>
+
   </div>
 
   <!-- <div class="bg-green_light mx-auto lg:py-16 py-12 lg:px-0 px-4"> -->
@@ -1313,7 +1328,7 @@
 
   <!-- <link rel="stylesheet" href="path-to-the-css/splide-extension-video.min.css"> -->
 
-    
+
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js"></script>
 
